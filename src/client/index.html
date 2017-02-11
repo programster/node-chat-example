@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <h2>Press f12 and look at the console. </h2>
+        <p>Then execute the following:</p>
+        <pre>socket.send(JSON.stringify({ name: 'Bob', message: 'Hello' }));</pre>
+        
+        <script type="text/javascript">
+            // Initialize 3 socket connections to the server.
+            var socket = new WebSocket('ws://localhost:3000');
+            
+            socket.onmessage = function (message) {
+                console.log('Connection 1', message.data);
+            };
+            
+            var socket2 = new WebSocket('ws://localhost:3000');
+            
+            socket2.onmessage = function (message) {
+                console.log('Connection 2', message.data);
+            };
+            
+            var socket3 = new WebSocket('ws://localhost:3000');
+            
+            socket3.onmessage = function (message) {
+                console.log('Connection 3', message.data);
+            };
+            
+            // Send a message every second
+            $(document).ready(function(){
+                setInterval(function(){ socket.send(JSON.stringify({ name: 'Bob', message: 'Hello' })); }, 1000);
+            });
+            
+        </script>
+    </body>
+</html>
