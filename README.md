@@ -5,11 +5,11 @@ A simple node chat example based on [a post I read on codeproject.com](https://w
 ## How To Run
 Make sure you have installed [NodeJs](http://blog.programster.org/install-nodejs/).
 
-Go to the server folder and execute:
+Start the server process by going to the server folder and execute:
 ```
 npm start
 ```
 
-Go to the client folder and double click index.html to open it in your browser.
+Go to the client folder and open the index.html file twice so that it appears twice in your browser. Now enter messages into one and you will see that they appear in both browsers.
 
-Press f12 to look at the console. You should see messages.
+**Important:** The sockets have been configured to use `localhost` so your server will need to be the same computer as the one you are opening the web client in. Otherwise you need to change the hostname.
