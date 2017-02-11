@@ -4,34 +4,58 @@
            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     </head>
     <body>
-        <h2>Press f12 and look at the console. </h2>
-        <p>Then execute the following:</p>
-        <pre>socket.send(JSON.stringify({ name: 'Bob', message: 'Hello' }));</pre>
+        <h2>Basic Chat</h2>
+        <p>This is a basic chat client which just sends/recieves messages through websockets.</p>
+        <textarea id="messages" readonly style="width:100%; height:200px; white-space: pre; line-height: 125%; overflow: auto;"></textarea><br />
+        
+        <hr />
+        <label for="name">Pseudonym:</label>
+        <input id="name" name="name" disabled placeholder="Write your name here."></input><br /><br />
+        
+        <label for="message">Message:</label><br />
+        <textarea name="message" id="message" rows=3 style="width:100%; white-space: pre; line-height: 125%; overflow: auto;" placeholder="Write your message here."></textarea><br />
+        <button onclick="submitMessage()">Submit</button>
         
         <script type="text/javascript">
+        
+            function getRandomName()
+            {
+                var names = [
+                    "Mark FlufferNutt",
+                    "YOLO Casserole",
+                    "Flynt Coalslaw",
+                    "Prince Fajita",
+                    "Nandy Ruman",
+                    "Rectus Erectus"
+                ];
+                
+                return names[Math.floor(Math.random() * names.length)];
+            }
+            
+            $(document).ready(function(){
+                $('#name').val(getRandomName());
+            });
+        
             // Initialize 3 socket connections to the server.
             var socket = new WebSocket('ws://localhost:3000');
             
             socket.onmessage = function (message) {
-                console.log('Connection 1', message.data);
+                var messageObj = JSON.parse(message.data);
+                var currentMessages = $('#messages').val();
+                var newValue = messageObj.data.name + ": " + messageObj.data.message + '\n---\n' + currentMessages;
+                $('#messages').val(newValue);
             };
             
-            var socket2 = new WebSocket('ws://localhost:3000');
-            
-            socket2.onmessage = function (message) {
-                console.log('Connection 2', message.data);
-            };
-            
-            var socket3 = new WebSocket('ws://localhost:3000');
-            
-            socket3.onmessage = function (message) {
-                console.log('Connection 3', message.data);
-            };
             
             // Send a message every second
-            $(document).ready(function(){
-                setInterval(function(){ socket.send(JSON.stringify({ name: 'Bob', message: 'Hello' })); }, 1000);
-            });
+            function submitMessage()
+            {
+                // Send the message
+                socket.send(JSON.stringify({ "name": $('#name').val(), "message": $('#message').val() }));
+                
+                // Clear out our message body to prepare for the next one
+                $('#message').val(""); 
+            }
             
         </script>
     </body>
